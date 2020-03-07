@@ -15,7 +15,9 @@ public class MyIoCContainer {
     // 实现一个简单的IoC容器，使得：
     // 1. 从beans.properties里加载bean定义
     // 2. 自动扫描bean中的@Autowired注解并完成依赖注入
-
+    // 先把所有的实体类放入到map中
+    // 然后循环map 拿出每个bean实例 扫描bean实例中的字段Field 如果标注了@Autowired 则从bean中取出
+    // 将指定对象变量上此 Field 对象表示的字段设置为指定的新值
     private static ConcurrentHashMap beans = new ConcurrentHashMap();
 
     public static void main(String[] args) {
@@ -53,6 +55,8 @@ public class MyIoCContainer {
             Object fieldInstance = beans.get(fieldName);
             field.setAccessible(true);
             try {
+//                void set(Object obj, Object value)
+//                将指定对象变量上此 Field 对象表示的字段设置为指定的新值。
                 field.set(instance, fieldInstance);
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
